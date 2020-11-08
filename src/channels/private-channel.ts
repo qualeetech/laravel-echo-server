@@ -2,6 +2,7 @@ let request = require('request');
 let url = require('url');
 import { Channel } from './channel';
 import { Log } from './../log';
+let cookie = require('cookie');
 
 export class PrivateChannel {
     /**
@@ -20,10 +21,20 @@ export class PrivateChannel {
      * Send authentication request to application server.
      */
     authenticate(socket: any, data: any): Promise<any> {
+        let headers  = {};
+        
+        if (data.auth && data.auth.useAuthCookie) {
+            headers = (data.auth && data.auth.headers) ? data.auth.headers : {};
+            var cookies = this.getCookie(socket.request);
+            if (cookies[data.auth.useAuthCookie]) {
+                headers['Authorization'] = `Bearer ${cookies[data.auth.useAuthCookie]}`;
+            }
+        }
+
         let options = {
             url: this.authHost(socket) + this.options.authEndpoint,
             form: { channel_name: data.channel },
-            headers: (data.auth && data.auth.headers) ? data.auth.headers : {},
+            headers: headers,
             rejectUnauthorized: false
         };
 
@@ -32,6 +43,12 @@ export class PrivateChannel {
         }
 
         return this.serverRequest(socket, options);
+    }
+
+    private getCookie(req: any) {
+        var cookies = req.headers.cookie;
+        // user=someone; session=QyhYzXhkTZawIb5qSl3KKyPVN (this is my cookie i get)
+        return cookie.parse(cookies ? cookies : '');
     }
 
     /**
