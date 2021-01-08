@@ -22,9 +22,8 @@ export class PrivateChannel {
      */
     authenticate(socket: any, data: any): Promise<any> {
         let headers  = {};
-        
+        headers = (data.auth && data.auth.headers) ? data.auth.headers : {};
         if (data.auth && data.auth.useAuthCookie) {
-            headers = (data.auth && data.auth.headers) ? data.auth.headers : {};
             var cookies = this.getCookie(socket.request);
             if (cookies[data.auth.useAuthCookie]) {
                 headers['Authorization'] = `Bearer ${cookies[data.auth.useAuthCookie]}`;

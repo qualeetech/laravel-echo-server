@@ -1,10 +1,10 @@
 {
-  "name": "laravel-echo-server",
-  "version": "1.6.2",
-  "description": "Laravel Echo Node JS Server for Socket.io",
+  "name": "qualee-laravel-echo-server",
+  "version": "1.6.2-rc1",
+  "description": "Fork of Laravel Echo Node JS Server for Socket.io",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tlaverdure/Laravel-Echo-Server.git"
+    "url": "https://github.com/qualeetech/laravel-echo-server.git"
   },
   "main": "dist/index.js",
   "keywords": [
@@ -43,5 +43,6 @@
   },
   "bin": {
     "laravel-echo-server": "bin/server.js"
-  }
+  },
+  "publishConfig": { "registry": "https://registry.npmjs.org" }
 }
